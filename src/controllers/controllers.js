@@ -51,9 +51,36 @@ const addSubscriber = (req, res) => {
     }
 };
 
+const updateTask = (req, res) => {
+    const errors = validationResult(req);
+
+    if (errors.array().length > 0) {
+        res.send(errors.array());
+    } else {
+        const id = parseInt(req.body.id);
+        //const description = req.body.description.substring(0,250);
+        const task = {
+            name: req.body.name,
+            description: req.body.description,
+            creationDate: req.body.creationDate,
+            lastEditDate: req.body.lastEditDate,
+            time: req.body.time,
+            status: req.body.status,
+        };
+        //const sqlQuery = 'UPDATE task SET description = ' + '"' +description + '"' + 'WHERE id= '+ id;
+        const sqlQuery = 'UPDATE task SET ? WHERE id = ' + id;
+        database.query(sqlQuery, task, (err, row) => {
+            if (err) throw err;
+
+            res.send('change successfully!');
+        });
+    }
+};
+
 module.exports = {
     initDatabase,
     getStatus,
     getTasks,
-    addSubscriber
+    addSubscriber,
+    updateTask
 }

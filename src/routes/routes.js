@@ -16,5 +16,15 @@ router.post('/subscribe',
     body('status').not().isEmpty().escape(),
     controller.addSubscriber    
 );
+router.put('/update', 
+    body('id').not().isEmpty().escape(),
+    body('name').not().isEmpty().escape(),
+    body('description'),
+    body('creationDate').not().isEmpty().escape(),
+    body('lastEditDate').not().isEmpty().escape(),
+    body('time').not().isEmpty().escape(),
+    body('status').not().isEmpty().escape(),
+    controller.updateTask    
+);
 
 module.exports = router;
