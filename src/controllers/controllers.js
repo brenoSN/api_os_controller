@@ -15,6 +15,15 @@ const getStatus = (req, res) => {
     });
 };
 
+const getTasks = (req, res) => {
+    const sqlQuery = 'SELECT * FROM task';
+
+    database.query(sqlQuery, (err, result) => {
+        if (err) throw err;
+
+        res.json(result);
+    });
+};
 
 const addSubscriber = (req, res) => {
     const errors = validationResult(req);
@@ -45,5 +54,6 @@ const addSubscriber = (req, res) => {
 module.exports = {
     initDatabase,
     getStatus,
+    getTasks,
     addSubscriber
 }
