@@ -27,4 +27,7 @@ router.put('/update',
     controller.updateTask    
 );
 
+router.delete('/delete',body('id').not().isEmpty().escape(), controller.deleteTask);
+
+
 module.exports = router;

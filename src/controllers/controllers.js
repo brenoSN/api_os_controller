@@ -25,6 +25,20 @@ const getTasks = (req, res) => {
     });
 };
 
+
+const deleteTask = (req, res) => {
+
+    const sqlQuery = 'DELETE FROM task WHERE id = ' + req.body.id;
+
+    database.query(sqlQuery, (err, row) => {
+        if (err) throw err;
+
+        res.json(row);
+    });
+
+};
+
+
 const addSubscriber = (req, res) => {
     const errors = validationResult(req);
 
@@ -82,5 +96,6 @@ module.exports = {
     getStatus,
     getTasks,
     addSubscriber,
-    updateTask
+    updateTask,
+    deleteTask
 }
