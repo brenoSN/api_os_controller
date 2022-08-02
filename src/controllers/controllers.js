@@ -5,6 +5,21 @@ const initDatabase = (req, res) => {
 
 };
 
+function generate(n) {
+    var add = 1,
+      max = 12 - add;
+  
+    if (n > max) {
+      return generate(max) + generate(n - max);
+    }
+  
+    max = Math.pow(10, n + add);
+    var min = max / 10; // Math.pow(10, n) basically 
+    var number = Math.floor(Math.random() * (max - min + 1)) + min;
+  
+    return ("" + number).substring(add);
+}
+
 const getStatus = (req, res) => {
     const sqlQuery = 'SELECT * FROM task_status';
 
@@ -25,6 +40,15 @@ const getTasks = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+    const sqlQuery = 'SELECT password FROM user WHERE name = ' + '"' + req.body.name + '"' + ' AND password = ' + '"' + req.body.password + '"';
+    
+
+    database.query(sqlQuery, (err, result) => {
+        if (err) throw err;
+        res.json(result.length == 1 && req.body.password == result[0].password);
+    });
+};
 
 const deleteTask = (req, res) => {
 
@@ -91,11 +115,63 @@ const updateTask = (req, res) => {
     }
 };
 
+
+
+const addStatus = (req, res) => {
+    const errors = validationResult(req);
+
+    if (errors.array().length > 0) {
+        res.send(errors.array());
+    } else {
+        const status = {
+            id: req.body.id,
+            status: req.body.status,
+        };
+
+        const sqlQuery = 'INSERT INTO task_status SET ?';
+
+        database.query(sqlQuery, status, (err, row) => {
+            if (err) throw err;
+
+            res.send('Subscribed successfully!');
+        });
+    }
+};
+
+const addUser = (req, res) => {
+    const errors = validationResult(req);
+
+    if (errors.array().length > 0) {
+        res.send(errors.array());
+    } else {
+        const status = {
+            id: generate(8),
+            name: req.body.name,
+            password: req.body.password
+        };
+        try {
+            const sqlQuery = 'INSERT INTO user SET ?';
+
+            database.query(sqlQuery, status, (err, row) => {
+                if (err) throw err;
+    
+                res.send('Subscribed successfully!');
+            });
+        }
+        catch (err) {
+            logMyErrors(err);
+        }
+    }
+};
+
 module.exports = {
     initDatabase,
     getStatus,
     getTasks,
     addSubscriber,
     updateTask,
-    deleteTask
+    deleteTask,
+    addStatus,
+    addUser,
+    login
 }
