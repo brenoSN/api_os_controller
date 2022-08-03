@@ -9,7 +9,7 @@ router.get('/status', controller.getStatus);
 
 router.put('/tasks', body('userId').not().isEmpty().escape(), controller.getTasks);
 
-router.get('/login', body('name').not().isEmpty().escape(), body('password').not().isEmpty().escape(), controller.login);
+router.put('/login', body('name').not().isEmpty().escape(), body('password').not().isEmpty().escape(), controller.login);
 
 router.post('/subscribe', 
     body('id').not().isEmpty().escape(),
