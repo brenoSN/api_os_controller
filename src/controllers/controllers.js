@@ -43,18 +43,21 @@ const getTasks = (req, res) => {
 };
 
 const login = (req, res) => {
-    const sqlQuery = 'SELECT password FROM user WHERE name = ' + '"' + req.body.name + '"' + ' AND password = ' + '"' + req.body.password + '"';
+    const sqlQuery = 'SELECT id FROM user WHERE name = ' + '"' + req.body.name + '"' + ' AND password = ' + '"' + req.body.password + '"';
     
 
     database.query(sqlQuery, (err, result) => {
         if (err) throw err;
-        res.json(result.length == 1 && req.body.password == result[0].password);
+
+        if(result.length > 0)
+            res.json(result[0].id);
+        else res.json(-1);
     });
 };
 
 const deleteTask = (req, res) => {
 
-    const sqlQuery = 'DELETE FROM task WHERE id = ' + req.body.id;
+    const sqlQuery = 'DELETE FROM regUserTasks WHERE taskId = ' + req.body.id; '; DELETE FROM task WHERE id = ' + req.body.id; 
 
     database.query(sqlQuery, (err, row) => {
         if (err) throw err;
