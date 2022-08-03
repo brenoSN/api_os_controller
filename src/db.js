@@ -7,7 +7,8 @@ const database = mysql.createConnection({
     user: "root",
     password: "admin",
     database: "os_controller",
-    port: 3306
+    port: 3306,
+    multipleStatements: true
 });
 
 module.exports = database;

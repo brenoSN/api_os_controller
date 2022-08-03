@@ -31,8 +31,10 @@ const getStatus = (req, res) => {
 };
 
 const getTasks = (req, res) => {
-    const sqlQuery = 'SELECT * FROM task';
-
+    const sqlQuery = 'SELECT T.id, T.name, T.description, T.creationDate, T.lastEditDate, T.time, T.status' +
+    ' from task T INNER JOIN regUserTasks R ON T.id = R.taskId INNER JOIN '+
+    ' user U ON U.id = R.userId WHERE R.userId =' + req.body.userId;
+    
     database.query(sqlQuery, (err, result) => {
         if (err) throw err;
 
@@ -79,9 +81,14 @@ const addSubscriber = (req, res) => {
             status: req.body.status,
         };
 
-        const sqlQuery = 'INSERT INTO task SET ?';
+        const regTaskUser = {
+            taskId: req.body.id,
+            userId: req.body.userId
+        }
 
-        database.query(sqlQuery, task, (err, row) => {
+        const sqlQuery = 'INSERT INTO task SET ?; INSERT INTO regUserTasks SET ?';
+
+        database.query(sqlQuery, [task, regTaskUser] , (err, row) => {
             if (err) throw err;
 
             res.send('Subscribed successfully!');

@@ -7,7 +7,7 @@ router.get('/init', controller.initDatabase);
 
 router.get('/status', controller.getStatus);
 
-router.get('/tasks', controller.getTasks);
+router.put('/tasks', body('userId').not().isEmpty().escape(), controller.getTasks);
 
 router.get('/login', body('name').not().isEmpty().escape(), body('password').not().isEmpty().escape(), controller.login);
 
@@ -19,6 +19,7 @@ router.post('/subscribe',
     body('lastEditDate').not().isEmpty().escape(),
     body('time').not().isEmpty().escape(),
     body('status').not().isEmpty().escape(),
+    body('userId').not().isEmpty().escape(),
     controller.addSubscriber    
 );
 
